@@ -36,6 +36,8 @@ echo "---------------------------------------------------------"
 extra_args=()
 extra_args+=(--recurrent)
 
+export CUDA_VISIBLE_DEVICES=0
+
 python src/train.py \
 --dset_name ${dset_name} \
 --data_dir ${data_dir} \
