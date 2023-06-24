@@ -1,17 +1,9 @@
-# VLCap: Vision-Language with Contrastive Learning for Coherent Video Paragraph Captioning
-
- 	
-[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/vlcap-vision-language-with-contrastive/video-captioning-on-activitynet-captions)](https://paperswithcode.com/sota/video-captioning-on-activitynet-captions?p=vlcap-vision-language-with-contrastive)
-
-[[`arXiv`](https://arxiv.org/abs/2206.12972)] [[`pdf`](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9897766)]
-
-In this paper, we leverage the human perceiving process, that involves vision and language interaction, to generate a coherent paragraph description of untrimmed videos. We propose vision-language (VL) features consisting of two modalities, i.e., (i) vision modality to capture global visual content of the entire scene and (ii) language modality to extract scene elements description of both human and non-human objects (e.g. animals, vehicles, etc), visual and non-visual elements (e.g. relations, activities, etc). Furthermore, we propose to train our proposed VLCap under a contrastive learning VL loss. The experiments and ablation studies on ActivityNet Captions and YouCookII datasets show that our VLCap outperforms existing SOTA methods on both accuracy and diversity metrics.
-
+# Exploring CLIP-based Automated Approaches for Video Content Description Generation
 
 ## Environment Setup
 1. Clone this repository
 ```bash 
-git clone https://github.com/UARK-AICV/VLCAP.git
+git clone https://github.com/Huaish/VLCAP.git
 cd VLCAP
 ```
 
@@ -67,7 +59,7 @@ bash scripts/eval.sh anet [val/test] results/anet_re_*/greedy_pred_[val/test].js
 ```
 The results should be comparable with the results we present at Table 5 of the paper. 
 
-## Citations
+<!-- ## Citations
 If you find this code useful for your research, please cite our papers:
 
 ```bibtex
@@ -81,28 +73,10 @@ If you find this code useful for your research, please cite our papers:
   pages={3656-3661},
   doi={10.1109/ICIP46576.2022.9897766}}
 
-```
-
-
-```bibtex
-@ARTICLE{2022arXiv221115103Y,
-       author = {{Yamazaki}, Kashu and {Vo}, Khoa and {Truong}, Sang and {Raj}, Bhiksha and {Le}, Ngan},
-        title = "{VLTinT: Visual-Linguistic Transformer-in-Transformer for Coherent Video Paragraph Captioning}",
-      journal = {arXiv e-prints},
-     keywords = {Computer Science - Computer Vision and Pattern Recognition},
-         year = 2022,
-        month = nov,
-          eid = {arXiv:2211.15103},
-        pages = {arXiv:2211.15103},
-archivePrefix = {arXiv},
-       eprint = {2211.15103},
- primaryClass = {cs.CV},
-       adsurl = {https://ui.adsabs.harvard.edu/abs/2022arXiv221115103Y},
-      adsnote = {Provided by the SAO/NASA Astrophysics Data System}
-}
-```
+``` -->
 
 ## Acknowledgement
 We acknowledge the following open-source projects that we based on our work:
 
 1. [MART](https://github.com/jayleicn/recurrent-transformer) 
+2. [VLCAP](https://github.com/UARK-AICV/VLCAP.git)
