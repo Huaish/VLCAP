@@ -355,7 +355,6 @@ def train(model, training_data, validation_data, device, opt, resume_path=None):
         wandb.init(project="VLCap", config=opt, id=run_id, resume="allow")
         
     wandb.watch(model)
-    # print("run id: ", run_id)
 
     prev_best_score = 0.
     es_cnt = 0
