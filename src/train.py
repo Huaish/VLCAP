@@ -355,7 +355,7 @@ def train(model, training_data, validation_data, device, opt, resume_path=None):
         wandb.init(project="VLCap", config=opt, id=run_id, resume="allow")
         
     wandb.watch(model)
-    print("run id: ", run_id)
+    # print("run id: ", run_id)
 
     prev_best_score = 0.
     es_cnt = 0
@@ -556,6 +556,8 @@ def get_args():
     opt.cuda = not opt.no_cuda
 
     opt.recurrent = True if opt.xl else opt.recurrent
+    # opt.recurrent = False if opt.xl else opt.recurrent
+
     assert not (opt.recurrent and opt.untied), "cannot be True for both"
     assert not (opt.recurrent and opt.mtrans), "cannot be True for both"
     assert not (opt.untied and opt.mtrans), "cannot be True for both"
@@ -680,5 +682,4 @@ def main():
 
 
 if __name__ == "__main__":
-    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
     main()
