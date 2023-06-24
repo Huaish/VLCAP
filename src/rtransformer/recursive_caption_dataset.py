@@ -59,14 +59,19 @@ class RecursiveCaptionDataset(Dataset):
             "env_feat": "data/yc2/yc2_c3d/",
             "clip_feat": "data/yc2/yc2_clip_b16/lang_feature/",
             "sent_feat": "data/yc2/yc2_clip_b16/sent_feature/"
-        }
+        },
+        "clip": {
+            "env_feat": "data/clip/ViT-B_32/",
+            "clip_feat": "data/anet/anet_clip_b16/lang_feature/",
+            "sent_feat": "data/anet/anet_clip_b16/sent_feature/"
+        },
     }
 
     """
     recurrent: if True, return recurrent data
     """
     def __init__(self, dset_name, data_dir, duration_file, word2idx_path,
-                 max_t_len, max_v_len, max_n_sen, mode="train", recurrent=True, untied=False, combine_image_feature=False):
+                 max_t_len, max_v_len, max_n_sen, mode="train", recurrent=True, untied=False, combine_image_feature=False, data_path=None):
         self.dset_name = dset_name
         self.word2idx = load_json(word2idx_path)
         self.idx2word = {int(v): k for k, v in self.word2idx.items()}
@@ -90,7 +95,7 @@ class RecursiveCaptionDataset(Dataset):
 
         # data entries
         self.data = None
-        self.set_data_mode(mode=mode)
+        self.set_data_mode(mode=mode, data_path=data_path)
         self.missing_video_names = []
         self.fix_missing()
 
@@ -103,28 +108,33 @@ class RecursiveCaptionDataset(Dataset):
         items, meta = self.convert_example_to_features(self.data[index])
         return items, meta
 
-    def set_data_mode(self, mode):
+    def set_data_mode(self, mode, data_path=None):
         """mode: `train` or `val`"""
         logging.info("Mode {}".format(mode))
         self.mode = mode
-        if self.dset_name == "anet":
-            if mode == "train":  # 10000 videos
-                data_path = os.path.join(self.data_dir, "train.json")
-            elif mode == "val":  # 2500 videos
-                data_path = os.path.join(self.data_dir, "anet_entities_val_1.json")
-            elif mode == "test":  # 2500 videos
-                data_path = os.path.join(self.data_dir, "anet_entities_test_1.json")
+        if data_path is None:
+            if self.dset_name == "anet":
+                if mode == "train":  # 10000 videos
+                    data_path = os.path.join(self.data_dir, "train.json")
+                elif mode == "val":  # 2500 videos
+                    data_path = os.path.join(self.data_dir, "anet_entities_val_1.json")
+                elif mode == "test":  # 2500 videos
+                    data_path = os.path.join(self.data_dir, "anet_entities_test_1.json")
+                else:
+                    raise ValueError("Expecting mode to be one of [`train`, `val`, `test`], got {}".format(mode))
+            elif self.dset_name == "yc2":
+                if mode == "train":  # 10000 videos
+                    data_path = os.path.join(self.data_dir, "yc2_train_anet_format.json")
+                elif mode == "val":  # 2500 videos
+                    data_path = os.path.join(self.data_dir, "yc2_val_anet_format.json")
+                else:
+                    raise ValueError("Expecting mode to be one of [`train`, `val`, `test`], got {}".format(mode))
             else:
-                raise ValueError("Expecting mode to be one of [`train`, `val`, `test`], got {}".format(mode))
-        elif self.dset_name == "yc2":
-            if mode == "train":  # 10000 videos
-                data_path = os.path.join(self.data_dir, "yc2_train_anet_format.json")
-            elif mode == "val":  # 2500 videos
-                data_path = os.path.join(self.data_dir, "yc2_val_anet_format.json")
-            else:
-                raise ValueError("Expecting mode to be one of [`train`, `val`, `test`], got {}".format(mode))
+                raise ValueError
         else:
-            raise ValueError
+            # define specific data path
+            data_path = os.path.join(self.data_dir, data_path)
+
         self._load_data(data_path)
 
     def fix_missing(self):

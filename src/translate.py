@@ -113,7 +113,8 @@ def get_data_loader(opt, eval_mode="val"):
         duration_file=opt.v_duration_file,
         word2idx_path=opt.word2idx_path, max_t_len=opt.max_t_len,
         max_v_len=opt.max_v_len, max_n_sen=opt.max_n_sen + 10, mode=eval_mode,
-        recurrent=opt.recurrent, untied=opt.untied or opt.mtrans)
+        recurrent=opt.recurrent, untied=opt.untied or opt.mtrans,
+        data_path=opt.data_path)
 
     if opt.recurrent:  # recurrent model
         collate_fn = caption_collate
@@ -148,6 +149,9 @@ def main():
     parser.add_argument("--no_cuda", action="store_true")
     parser.add_argument("--seed", default=2019, type=int)
     parser.add_argument("--debug", action="store_true")
+    parser.add_argument("--data_path", type=str, default="")
+    parser.add_argument("--out_dir", type=str, default=None)
+    parser.add_argument("--output", type=str, default=None)
 
     opt = parser.parse_args()
     opt.cuda = not opt.no_cuda
@@ -190,7 +194,10 @@ def main():
         translator = Translator(opt, checkpoint)
 
         # pred_file = os.path.join(opt.res_dir, "model_noise_0.017", "{}_pred_{}.json".format(decoding_strategy, eval_mode))
-        pred_file = os.path.join(opt.res_dir, "{}_pred_{}.json".format(decoding_strategy, eval_mode))
+        if opt.out_dir and opt.output:
+            pred_file = os.path.join(opt.out_dir, opt.output.format(decoding_strategy, eval_mode))
+        else:
+            pred_file = os.path.join(opt.res_dir, "{}_pred_{}.json".format(decoding_strategy, eval_mode))
         pred_file = os.path.abspath(pred_file)
         if not os.path.exists(pred_file):
             json_res = run_translate(eval_data_loader, translator, opt=opt)
